@@ -1,0 +1,71 @@
+spring:
+  application:
+    name: hotel-ac-system
+  datasource:
+    url: jdbc:mysql://localhost:3306/hotel_final?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root
+    password: Txy180520
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 数据库连接池配置
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 60000
+      idle-timeout: 500000
+      max-lifetime: 540000
+  jpa:
+    hibernate:
+      ddl-auto: none # 禁用自动DDL，使用手动SQL脚本
+    show-sql: false # 关闭SQL日志输出
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: 8080
+
+# 日志配置
+logging:
+  level:
+    root: INFO
+    com.hotel: INFO
+    # 关闭MyBatis详细日志
+    com.hotel.mapper: WARN
+    org.apache.ibatis: WARN
+    com.zaxxer.hikari: WARN
+    # 关闭Spring相关的详细日志
+    org.springframework.transaction: WARN
+    org.mybatis.spring: WARN
+    org.springframework.jdbc.datasource.init: DEBUG
+
+# MyBatis-Plus配置
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    # 关闭SQL日志输出到控制台
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# 酒店配置
+hotel:
+  time-multiplier: 6 # 系统时间倍率     todo:需要配置
+  tick-time: 10000 # 60*1000/${hotel.time-multiplier}    todo:需要配置
+  ac:
+    total-count: 3 # 总空调数量
+    room-count: 5 # 总房间数量
+    default-temp: 25 # 默认温度
+    time-slice: 120 # 时间片轮转时间(秒)
+    heating-rate: 0.5 # 升温速度(度/分钟)
+    mode: 1 # 制冷为1 制热为-1    todo:需要配置
+    wake-up-temp: 1 # 唤醒请求的温度差
+  billing:
+    room-rate: 100.0 # 房费(元/天)
+    ac-rate:
+      low: 0.33 # 低风速费率(元/度)
+      medium: 0.5 # 中风速费率(元/度)
+      high: 1.0 # 高风速费率(元/度)
